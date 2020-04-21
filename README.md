@@ -1,4 +1,17 @@
-# dotfiles
+Table of Contents
+=================
+
+   * [Table of Contents](#table-of-contents)
+   * [dot-files](#dot-files)
+      * [Workflow to manage dot-files repos](#workflow-to-manage-dot-files-repos)
+         * [Initialization](#initialization)
+         * [Aliases](#aliases)
+         * [Usage](#usage)
+         * [Replication](#replication)
+            * [First time](#first-time)
+            * [Subsequent replication](#subsequent-replication)
+
+# dot-files
 
 This repo contains all my `public` dot-files that are published on public interest.
 
