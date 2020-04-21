@@ -1,0 +1,71 @@
+# Removes empty lines/comments
+ctc() { grep -v -E '^["|#|(//)]' $1 | sed -e '/^$/d'; }
+
+# Fix ssh masters
+fixssh() {
+  for key in SSH_AUTH_SOCK SSH_CONNECTION SSH_CLIENT; do
+    if (tmux show-environment | grep "^${key}" > /dev/null); then
+      value=`tmux show-environment | grep "^${key}" | sed -e "s/^[A-Z_]*=//"`
+      export ${key}="${value}"
+    fi
+  done
+}
+
+# Run a command multiple times
+run() {
+    number=$1
+    shift
+    for n in $(seq $number); do
+      $@
+    done
+}
+
+# Curl with details
+curl.time () { curl -o /dev/null -sw 'Return Code = %{http_code}\nBytes recieved = %{size_download}\nDNS = %{time_namelookup}\nConnect= %{time_connect}\nPretransfer = %{time_pretransfer}\nStart transfer = %{time_starttransfer}\nTotal = %{time_total}\n' "$@"; }
+
+# Openssl
+probessl() {
+    echo | openssl s_client -connect $1 -servername `echo $1 | sed 's/:.*//'` -showcerts 2>/dev/null
+}
+
+opensslmd5() {
+    probessl $1 | openssl x509 -noout -fingerprint -md5
+}
+
+openssldates() {
+   probessl $1 | openssl x509 -noout -dates -subject
+}
+
+openssltext() {
+   probessl $1 | openssl x509 -noout -text
+}
+
+opensslsans() {
+   openssltext $1 | awk -F, -v OFS="\n" '/Subject: /{x=gsub(/.*CN=/, ""); printf "\033[1mCommon Name:\033[0m\n"$x} /DNS:/{gsub(/ *DNS:/, ""); $1=$1; printf "\n\n\033[1mSAN Domains:\033[0m\n" $0"\n"}'
+}
+
+# Find
+fff() {
+    find . -name \*$1\*
+}
+
+# SSH
+function fixssh() {
+    rm -rf ~/.ssh/master-*
+}
+
+# Search wiki
+function sw() {
+	cd /Users/arastogi/Dropbox/raneto-docker/wiki
+	# $1 => term, or
+	# $1 -> file, $2 -> term
+	if [ -z "$2" ]; then
+		selected=$(rg -i $1 --line-number | fzf --layout=reverse --preview 'fold -w 80 -s {}')
+	else
+		selected=$(rg -i -g "*$1*" $2 --line-number | fzf --layout=reverse --preview 'fold -w 80 -s {}')
+	fi
+	if [[ ! -z "$selected" ]]; then
+		lno=`echo $selected | cut -d: -f2`
+		nvim `echo $selected | cut -d: -f1` +$lno
+	fi
+}

@@ -1,0 +1,10 @@
+# autoload -U +X compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+
+autoload bashcompinit
+bashcompinit
+
+# az cli
+if is_mac; then
+	source /usr/local/etc/bash_completion.d/az
+fi

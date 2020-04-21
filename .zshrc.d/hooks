@@ -1,0 +1,19 @@
+function preexec() {
+  timer=${timer:-$SECONDS}
+}
+
+function precmd() {
+  if [ $timer ]; then
+    timer_show=$(($SECONDS - $timer))
+    echo;
+    echo '\033[91m>>> \033[0m\033[92m' "${timer_show}s elasped..."'\033[0m'
+    export ELASPED_TIME="${timer_show} seconds"
+    unset timer
+  fi
+}
+
+function disable_time_keeping() {
+    unset -f preexec
+    unset -f precmd
+}
+

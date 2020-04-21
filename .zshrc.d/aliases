@@ -1,0 +1,45 @@
+# Global Aliases auto-expanding and shit!
+globalias() {
+   if [[ $LBUFFER =~ '[A-Z0-9]+$' ]]; then
+     zle _expand_alias
+     zle expand-word
+   fi
+   zle self-insert
+}
+zle -N globalias
+bindkey " " globalias
+bindkey "^ " magic-space           # control-space to bypass completion
+bindkey -M isearch " " magic-space # normal space during searches
+
+# End of Global Aliases auto-expending
+
+# My Global Aliases
+alias -g G=' | grep '
+alias -g L=' | less'
+alias -g CL=' | wc -l'
+alias -g BS='brew search '
+alias -g BI='brew install '
+alias -g VT='vim scp://tower/'
+alias -g CURLD='curl -s -D- -o /dev/null '
+alias -g SUC='| sort | uniq -c'
+
+# Normal aliases
+alias gitdf='git --git-dir=$HOME/.dot-files/ --work-tree=$HOME'
+alias vim='nvim'
+
+# Pastebin
+alias p="curl -s -F 'sprunge=<-' http://sprunge.us"
+alias pp="curl -s -F 'sprunge=<-' http://pb.abhijeetr.com"
+
+# Git
+alias gitnp="git --no-pager "
+alias ff="find . -name "
+
+# dig
+alias diga='dig +noall +answer '
+
+# carbon
+alias carbon='carbon-now -h'
+
+# fzf
+alias pf="fzf --reverse --preview 'fold -w80 {}'"

@@ -1,0 +1,5 @@
+compdef '_dispatch ssh ssh' cssh
+
+pbcopy_clean() {
+	pbpaste | sed -e 's/^.*)➤/➤/' -e '/^>>>.*elasped.*/d' | pbcopy
+}

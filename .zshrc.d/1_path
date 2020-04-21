@@ -1,0 +1,26 @@
+# PATH variable
+
+PATH=$PATH:$HOME/bin # Add RVM to PATH for scripting
+export PATH="$HOME/.npm-packages/bin:$PATH"
+
+export PATH=/usr/local/bin/:$PATH
+export PATH=/usr/local/sbin/:$PATH
+export PATH=$PATH:/usr/local/go/bin
+export GOPATH=$HOME/go
+# Add directories to $PATH variable
+PATH=$PATH:$HOME/.cabal/bin/ # Add haskell binaries to PATH
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+PATH=$PATH:$HOME/scripts/ # Add misc scripts to PATH
+PATH=$PATH:/usr/local/ # Add misc scripts to PATH
+PATH=$PATH:$HOME/Library/Python/2.7/lib/python/site-packages/powerline/commands # Add misc scripts to PATH
+PATH=$PATH:/opt/local/bin
+PATH=$PATH:/export/apps/python/2.7/bin/
+PATH=$PATH:/export/apps/python/3.5/bin/
+PATH=$PATH:/export/apps/python/3.6/bin/
+PATH=$PATH:/export/apps/python/3.7/bin/
+PATH=$PATH:/Users/arastogi/Library/Python/2.7/bin
+export PATH=$PATH:/usr/local/opt/go/libexec/bin
+export PATH=$PATH:$GOPATH/bin
+
+export PATH="/usr/local/opt/qt/bin:$PATH"
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"

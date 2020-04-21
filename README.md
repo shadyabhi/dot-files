@@ -1,18 +1,29 @@
-* [Intro](#intro)
-  * [dot-files repo workflow](#dot-files-repo-workflow)
-	 * [Initialization](#initialization)
-	 * [Aliases](#aliases)
-	 * [Usage](#usage)
-	 * [Replication](#replication)
-		* [First time](#first-time)
-		* [Subsequent replication](#subsequent-replication)
+Table of Contents
+=================
+
+   * [Intro](#intro)
+      * [Major features](#major-features)
+      * [Repo workflow](#repo-workflow)
+         * [Initialization](#initialization)
+         * [Aliases](#aliases)
+         * [Usage](#usage)
+         * [Replication](#replication)
+            * [First time](#first-time)
+            * [Subsequent replication](#subsequent-replication)
 
 # Intro
 
 This repo contains all my `public` dot-files that are published on public interest.
 
 
-## dot-files repo workflow
+## Major features
+
+* .zshrc.d: Easy organization of zshrc configs
+* .config/nvim: NVIM configs. nvim >> vim
+* .tmux.conf: tmux for pane management
+* .hammerspoon: Amazing automation software to config your Mac via lua scripts
+
+## Repo workflow
 
 I choose this workflow because it doesn't require me to install any new software.
 

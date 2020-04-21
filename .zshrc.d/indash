@@ -1,0 +1,28 @@
+function _indash {
+    # Cache file
+    if [[ ! -a "$HOME/.cache/all_ingraphs_dashboards"  ]]; then
+        echo '\nCaching file...'
+        mkdir -p ~/.cache/
+        curl -s 'https://ingraphs.prod.linkedin.com/api/v2/nav/dashboards?fabric_groups=prod' | jq '.dashboards | .[] | .name' -r | sed -e 's/\[/\\[/g' -e 's/\]/\\]/g' > ~/.cache/all_ingraphs_dashboards
+        if [[ $? != 0 ]]; then
+            echo 'Error caching inGraphs dashboards'
+        elif
+            echo 'File cached successfully, press tab again.'
+    fi
+    _wanted dashboards expl 'dashboard' compadd -M 'l:|=*' `cat ~/.cache/all_ingraphs_dashboards | tr '\n' ' '`
+}
+function indash() {
+    # Usage:-
+    # $ dash foo<TAB><TAB>
+    # You can also give another argument which will be used as filter
+    # It also does matching even if foo is not in the beginning
+    name=${@[1]}
+    filter=${@[2]}
+    url="https://ingraphs.prod.linkedin.com/dashboard/$name/?fabric_groups=prod"
+    if [[ $filter != "" ]]; then
+        url=$url"&filter=$filter"
+    fi
+    echo "Opening URL: " $url
+    open $url
+}
+compdef _indash indash
