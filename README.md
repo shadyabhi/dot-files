@@ -37,15 +37,22 @@ git init --bare $HOME/.dot-files
 git init --bare $HOME/.dot-files-private
 
 # One time use, later we've aliases
-gitdf  --git-dir=$HOME/.dot-files/ --work-tree=$HOME remote add origin git@github.com:shadyabhi/dot-files.git
+git --git-dir=$HOME/.dot-files/ --work-tree=$HOME remote add origin git@github.com:shadyabhi/dot-files.git
+git --git-dir=$HOME/.dot-files-private/ --work-tree=$HOME remote add origin git@github.com:shadyabhi/dot-files-private.git
+
+# So you don't see all your $HOME files as untracked files
+git --git-dir=$HOME/.dot-files/ --work-tree=$HOME config status.showUntrackedFiles no
+git --git-dir=$HOME/.dot-files-private/ --work-tree=$HOME config status.showUntrackedFiles no
 ```
 
 ### Aliases
 
 ```bash
+# Used for public configs
 alias gitdf='git --git-dir=$HOME/.dot-files/ --work-tree=$HOME'
+
+# Used for private configs
 alias gitdfpv='git --git-dir=$HOME/.dot-files-private/ --work-tree=$HOME'
-gitdf config status.showUntrackedFiles no
 ```
 
 ### Usage

@@ -25,6 +25,7 @@ alias -g SUC='| sort | uniq -c'
 
 # Normal aliases
 alias gitdf='git --git-dir=$HOME/.dot-files/ --work-tree=$HOME'
+alias gitdfpv='git --git-dir=$HOME/.dot-files-private/ --work-tree=$HOME'
 alias vim='nvim'
 
 # Pastebin
