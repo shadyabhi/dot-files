@@ -64,9 +64,9 @@ gitdf push
 #### First time
 
 ```bash
-git clone --separate-git-dir=$HOME/.dotfiles https://github.com/shadyabhi/dotfiles.git dotfiles-tmp
-rsync --recursive --verbose --exclude '.git' dotfiles-tmp/ $HOME/
-rm --recursive dotfiles-tmp
+git clone --separate-git-dir=$HOME/.dot-files https://github.com/shadyabhi/dot-files.git dot-files-tmp
+rsync --recursive --verbose --exclude '.git' dot-files-tmp/ $HOME/
+rm --recursive dot-files-tmp
 ```
 
 #### Subsequent replication
