@@ -1,22 +1,18 @@
-Table of Contents
-=================
+* [Intro](#intro)
+  * [dot-files repo workflow](#dot-files-repo-workflow)
+	 * [Initialization](#initialization)
+	 * [Aliases](#aliases)
+	 * [Usage](#usage)
+	 * [Replication](#replication)
+		* [First time](#first-time)
+		* [Subsequent replication](#subsequent-replication)
 
-   * [Table of Contents](#table-of-contents)
-   * [dot-files](#dot-files)
-      * [Workflow to manage dot-files repos](#workflow-to-manage-dot-files-repos)
-         * [Initialization](#initialization)
-         * [Aliases](#aliases)
-         * [Usage](#usage)
-         * [Replication](#replication)
-            * [First time](#first-time)
-            * [Subsequent replication](#subsequent-replication)
-
-# dot-files
+# Intro
 
 This repo contains all my `public` dot-files that are published on public interest.
 
 
-## Workflow to manage dot-files repos
+## dot-files repo workflow
 
 I choose this workflow because it doesn't require me to install any new software.
 
