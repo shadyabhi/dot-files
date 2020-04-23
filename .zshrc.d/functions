@@ -56,16 +56,20 @@ function fixssh() {
 
 # Search wiki
 function sw() {
-	cd /Users/arastogi/Dropbox/raneto-docker/wiki
-	# $1 => term, or
-	# $1 -> file, $2 -> term
-	if [ -z "$2" ]; then
-		selected=$(rg -i $1 --line-number | fzf --layout=reverse --preview 'fold -w 80 -s {}')
-	else
-		selected=$(rg -i -g "*$1*" $2 --line-number | fzf --layout=reverse --preview 'fold -w 80 -s {}')
-	fi
-	if [[ ! -z "$selected" ]]; then
-		lno=`echo $selected | cut -d: -f2`
-		nvim `echo $selected | cut -d: -f1` +$lno
-	fi
+	cd /users/arastogi/dropbox/raneto-docker/wiki
+	# By default, my editor is Zettlr for markdown
+	open $(rg --files-with-matches --no-messages "$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --ignore-case --pretty --context 10 '$1' {}")
+}
+
+# Search for commands
+function swc() {
+	cd /users/arastogi/dropbox/raneto-docker/wiki
+	# By default, my editor is Zettlr for markdown
+	open $(rg --files-with-matches --no-messages -i " *$1" | fzf --preview "highlight -O ansi -l {} 2> /dev/null | rg --ignore-case --pretty -B 3 '$1' {}")
+}
+
+# Search wiki by filename
+function swf() {
+	cd /users/arastogi/dropbox/raneto-docker/wiki
+	open `fzf --layout=reverse --preview 'fold -w 80 -s {}'`
 }
