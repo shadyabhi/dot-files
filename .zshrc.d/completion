@@ -1,0 +1,26 @@
+# Use auto-complete of ssh for cssh
+compdef '_dispatch ssh ssh' cssh
+
+# Global Aliases auto-expanding and shit!
+globalias() {
+   if [[ $LBUFFER =~ '[A-Z0-9]+$' ]]; then
+     zle _expand_alias
+     zle expand-word
+   fi
+   zle self-insert
+}
+zle -N globalias
+bindkey " " globalias
+bindkey "^ " magic-space           # control-space to bypass completion
+bindkey -M isearch " " magic-space # normal space during searches
+# End of Global Aliases auto-expending
+
+zstyle ':completion:*' menu select
+zstyle -e ':completion:*' list-colors 'thingy=${PREFIX##*/} reply=( "=(#b)($thingy)(?)*=00=$color[green]=$color[bg-green]" )'
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:descriptions' format '%B%d%b'
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+zstyle ':completion:*' group-name
+zstyle ':completion:*' users
+zstyle ':urlglobber' url-other-schema
