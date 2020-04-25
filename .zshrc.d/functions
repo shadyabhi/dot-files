@@ -44,6 +44,10 @@ opensslsans() {
    openssltext $1 | awk -F, -v OFS="\n" '/Subject: /{x=gsub(/.*CN=/, ""); printf "\033[1mCommon Name:\033[0m\n"$x} /DNS:/{gsub(/ *DNS:/, ""); $1=$1; printf "\n\n\033[1mSAN Domains:\033[0m\n" $0"\n"}'
 }
 
+vf() {
+	vim `fzf --layout=reverse --preview 'fold -w 80 -s {}'`
+}
+
 # Find
 fff() {
     find . -name \*$1\*
