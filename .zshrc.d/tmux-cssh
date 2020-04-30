@@ -1,0 +1,19 @@
+outside_tmux () {
+        [[ $TERM != screen* ]] && test -z "$TMUX"
+}
+
+tmux-cssh () {
+        outside_tmux && target=`tmux new-session -d -P`  || target=`tmux new-window -P`
+        target=${target/.0/}
+        tmux send-keys -t $target "ssh $1; exit" Enter
+        shift
+        for i in "$@"
+        do
+                tmux split-window -t $target -h
+                tmux send-keys "ssh $i; exit" Enter
+                tmux select-layout -t $target tiled > /dev/null
+        done
+        tmux select-pane -t $target
+        tmux set-window-option -t $target synchronize-panes on > /dev/null
+        outside_tmux && tmux attach-session -t $target
+}
