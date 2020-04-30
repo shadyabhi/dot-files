@@ -1,8 +1,4 @@
-outside_tmux () {
-        [[ $TERM != screen* ]] && test -z "$TMUX"
-}
-
-tmux-cssh () {
+tssh () {
         outside_tmux && target=`tmux new-session -d -P`  || target=`tmux new-window -P`
         target=${target/.0/}
         tmux send-keys -t $target "ssh $1; exit" Enter
