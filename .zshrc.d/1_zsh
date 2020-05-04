@@ -23,8 +23,8 @@ zstyle ':urlglobber' url-other-schema
 
 source ~/.oh-my-zsh/zsh-git-prompt/zshrc.sh
 
-PROMPT='%{$fg_bold[red]%}➜ \$?=%?%{$fg_bold[green]%}%p @%{$fg_bold[white]%}%m%  %{$fg[cyan]%}%2d %{$fg_bold[red]%}%{$fg_bold[blue]%}$(git_super_status)➤ %{$reset_color%}%'
-RPROMPT='%{$fg_bold[yellow]%}[%D{%L:%M:%S}] %{$reset_color%}%'$RPROMPT
+PROMPT='%{$fg_bold[red]%}➜ \$?=%?%{$fg_bold[green]%}%p @%{$fg_bold[white]%}%m%  %{$fg[cyan]%}%2d %{$fg_bold[red]%}%{$fg_bold[blue]%}$(git_super_status) %{$fg_bold[yellow]%}[%D{%L:%M:%S}] ➤ %{$reset_color%}%'
+# RPROMPT='%{$fg_bold[yellow]%}[%D{%L:%M:%S}] %{$reset_color%}%'$RPROMPT
 
 # To reset prompt every second (might interfere with other plugins)
 # TMOUT=1
