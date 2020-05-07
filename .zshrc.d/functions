@@ -77,3 +77,7 @@ function swf() {
 	cd /users/arastogi/dropbox/raneto-docker/wiki
 	open `fzf --layout=reverse --preview 'fold -w 80 -s {}'`
 }
+
+hex2dec() {
+    perl -le "print hex(\"$1\");"
+}
