@@ -81,3 +81,11 @@ function swf() {
 hex2dec() {
     perl -le "print hex(\"$1\");"
 }
+
+dec2hex() {
+    printf "%x\n" $1
+}
+
+ip2hex() {
+    python -c "import hashlib; print(hex(int(hashlib.sha256(\"$1\").hexdigest()[:8], 16) % (2**31)))"
+}
