@@ -1,0 +1,3 @@
+[submodule "/Users/arastogi/.zsh/zsh-autosuggestions"]
+	path = /Users/arastogi/.zsh/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
