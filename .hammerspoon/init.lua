@@ -1,6 +1,6 @@
--- require "window"
-
--- Start message
+require "hyper"
+require "launch"
+require "window"
 
 -- Enable Apple Script support
 hs.allowAppleScript(true)
@@ -8,11 +8,5 @@ hs.allowAppleScript(true)
 -- Load spoons
 hs.loadSpoon("ReloadConfiguration")
 spoon.ReloadConfiguration:start()
-
--- Pradadad
-local hyper = {"cmd", "alt", "ctrl"}
-local hypershift = {"cmd", "alt", "ctrl", "shift"}
-local hyper_cmd_alt = {"cmd", "alt"}
-
 
 hs.alert.show("Hammerspoon reload finished successfully!")

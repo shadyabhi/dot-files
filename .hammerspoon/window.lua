@@ -50,57 +50,89 @@ function mouseHighlight()
     mouseCircleTimer = hs.timer.doAfter(3, function() mouseCircle:delete() end)
 end
 
--- Move window on same screen (full vertical)
-hs.hotkey.bind(hyper_cmd_alt, "Left", function() moveWindow(hs.window.focusedWindow(), 0, 0, 0.5, 1) end)
-hs.hotkey.bind(hyper_cmd_alt, "Right", function() moveWindow(hs.window.focusedWindow(), 0.5, 0, 0.5, 1) end)
-hs.hotkey.bind(hyper_cmd_alt, "Up", function() moveWindow(hs.window.focusedWindow(), 0, 0, 1, 0.5) end)
-hs.hotkey.bind(hyper_cmd_alt, "Down", function() moveWindow(hs.window.focusedWindow(), 0, 0.5, 1, 0.5) end)
--- maximize window
-hs.hotkey.bind(hyper_cmd_alt, "f", function() hs.window.focusedWindow():maximize(0) end)
 
+hca_bind("1", function() moveWindow(hs.window.focusedWindow(), 0, 0, 0.5, 0.5) end)
+hca_bind("2", function() moveWindow(hs.window.focusedWindow(), 0.5, 0, 0.5, 0.5) end)
+hca_bind("3", function() moveWindow(hs.window.focusedWindow(), 0, 0.5, 0.5, 0.5) end)
+hca_bind("4", function() moveWindow(hs.window.focusedWindow(), 0.5, 0.5, 0.5, 0.5) end)
 
--- Move window on same screen (50% vertical)
-hs.hotkey.bind(hyper, "Left", function() moveWindow(hs.window.focusedWindow(), 0, 0.5, 0.5, 1) end)
-hs.hotkey.bind(hyper, "Right", function() moveWindow(hs.window.focusedWindow(), 0.5, 0.5, 0.5, 1) end)
+-- Grid layout
+hs.grid.setGrid('2x2')
+hs.grid.setMargins('0x0')
 
--- Center mouse to currently focused screen
-hs.hotkey.bind(hyper, "m", function()
-	win = hs.window.focusedWindow()
-    hs.alert.show(win:title(), hs.alert.defaultStyle, hs.screen.mainScreen(), 0.5)
-    hs.mouse.setAbsolutePosition(win:frame().center)
-	mouseHighlight()
-end)
---
--- Move mouse
-hs.hotkey.bind(hyper, 'n', function()
-    local screen = hs.mouse.getCurrentScreen()
-    local nextScreen = screen:next()
-    local rect = nextScreen:fullFrame()
-    local center = hs.geometry.rectMidPoint(rect)
+h_bind("right", hs.grid.pushWindowRight)
+h_bind("left", hs.grid.pushWindowLeft)
+h_bind("down", hs.grid.pushWindowDown)
+h_bind("up", hs.grid.pushWindowUp)
 
-    -- hs.mouse.setRelativePosition(center, nextScreen)
-    hs.mouse.setAbsolutePosition(center)
-	hs.eventtap.leftClick(hs.mouse.getAbsolutePosition())
-	mouseHighlight()
+hca_bind("up", function()
+    local win = hs.window.focusedWindow()
+    if win == nil then return end
+    local screen = win:screen()
+    local sg = hs.grid.getGrid(screen)
+    local g = hs.grid.get(win)
+    if g.y + g.h >= sg.h and g.y ~= 0 then
+        g.y = g.y - 1
+        g.h = g.h + 1
+        hs.grid.set(win, g)
+    else
+        g.h = g.h - 1
+        hs.grid.set(win, g)
+    end
 end)
 
-hs.hotkey.bind(hyper, 's', function()
-    hs.alert.show("Moving apps....", 2)
-	local laptopScreen =  hs.screen "Color LCD"
-	local mainScreen = hs.screen "U32J59x"
-	local verticalScreen = hs.screen "P27h"
 
-	-- Chrome
-	hs.window 'Chrome':moveToScreen(mainScreen)
-	moveWindow(hs.window 'Chrome', 0,0, 0.5,1)
+hca_bind("down", function()
+    local win = hs.window.focusedWindow()
+    if win == nil then return end
+    local screen = win:screen()
+    local sg = hs.grid.getGrid(screen)
+    local g = hs.grid.get(win)
+    if g.y + g.h == sg.h then
+        g.y = g.y + 1
+        g.h = g.h - 1
+        hs.grid.set(win, g)
+    else
+        g.h = g.h + 1
+        hs.grid.set(win, g)
+    end
+end)
 
-	-- Meeting Video on the macbook
-	hs.window 'Blue':moveToScreen(laptopScreen)
-	moveWindow(hs.window 'Blue', 0, 0, 0.5,1)
-	hs.window 'Zoom':moveToScreen(laptopScreen)
-	moveWindow(hs.window 'Zoom', 0.5,0, 0.5,1)
 
-	-- Chats on the vertical screen
-	hs.window 'Slack':moveToScreen(verticalScreen)
-	moveWindow(hs.window 'Slack', 0, 0, 1, 0.5)
+hca_bind("right", function()
+    local win = hs.window.focusedWindow()
+    if win == nil then return end
+    local screen = win:screen()
+    local sg = hs.grid.getGrid(screen)
+    local g = hs.grid.get(win)
+    if g.x + g.w == sg.w then
+        g.x = g.x + 1
+        g.w = g.w - 1
+        hs.grid.set(win, g)
+    else
+        g.w = g.w + 1
+        hs.grid.set(win, g)
+    end
+end)
+
+hca_bind("left", function()
+    local win = hs.window.focusedWindow()
+    if win == nil then return end
+    local screen = win:screen()
+    local sg = hs.grid.getGrid(screen)
+    local g = hs.grid.get(win)
+    if g.x + g.w >= sg.w and g.x ~= 0 then
+        g.x = g.x - 1
+        g.w = g.w + 1
+        hs.grid.set(win, g)
+    else
+        g.w = g.w - 1
+        hs.grid.set(win, g)
+    end
+end)
+
+hca_bind("s", function()
+	local win = hs.window.focusedWindow()
+    if win == nil then return end
+	hs.grid.snap(win)
 end)
