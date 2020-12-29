@@ -65,12 +65,11 @@ h_bind("left", hs.grid.pushWindowLeft)
 h_bind("down", hs.grid.pushWindowDown)
 h_bind("up", hs.grid.pushWindowUp)
 
+
 hca_bind("up", function()
-    local win = hs.window.focusedWindow()
-    if win == nil then return end
-    local screen = win:screen()
-    local sg = hs.grid.getGrid(screen)
-    local g = hs.grid.get(win)
+	win, screen, sg, g = getWinInfo()
+	if win == nil then return end
+
     if g.y + g.h >= sg.h and g.y ~= 0 then
         g.y = g.y - 1
         g.h = g.h + 1
@@ -83,11 +82,9 @@ end)
 
 
 hca_bind("down", function()
-    local win = hs.window.focusedWindow()
-    if win == nil then return end
-    local screen = win:screen()
-    local sg = hs.grid.getGrid(screen)
-    local g = hs.grid.get(win)
+	win, screen, sg, g = getWinInfo()
+	if win == nil then return end
+
     if g.y + g.h == sg.h then
         g.y = g.y + 1
         g.h = g.h - 1
@@ -100,11 +97,9 @@ end)
 
 
 hca_bind("right", function()
-    local win = hs.window.focusedWindow()
-    if win == nil then return end
-    local screen = win:screen()
-    local sg = hs.grid.getGrid(screen)
-    local g = hs.grid.get(win)
+	win, screen, sg, g = getWinInfo()
+	if win == nil then return end
+
     if g.x + g.w == sg.w then
         g.x = g.x + 1
         g.w = g.w - 1
@@ -116,11 +111,9 @@ hca_bind("right", function()
 end)
 
 hca_bind("left", function()
-    local win = hs.window.focusedWindow()
-    if win == nil then return end
-    local screen = win:screen()
-    local sg = hs.grid.getGrid(screen)
-    local g = hs.grid.get(win)
+	win, screen, sg, g = getWinInfo()
+	if win == nil then return end
+
     if g.x + g.w >= sg.w and g.x ~= 0 then
         g.x = g.x - 1
         g.w = g.w + 1
@@ -136,3 +129,14 @@ hca_bind("s", function()
     if win == nil then return end
 	hs.grid.snap(win)
 end)
+
+function getWinInfo()
+    local win = hs.window.focusedWindow()
+	if win == nil then return nil, nil, nil, nil end
+
+    local screen = win:screen()
+    local sg = hs.grid.getGrid(screen)
+    local g = hs.grid.get(win)
+
+	return win, screen, sg, g
+end
