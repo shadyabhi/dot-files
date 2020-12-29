@@ -17,15 +17,17 @@ hs.window.animationDuration=0
 -- For x and y: use 0 to expand fully in that dimension, 0.5 to expand halfway
 -- For w and h: use 1 for full, 0.5 for half
 function moveWindow(win, x, y, w, h)
-	local f = win:frame()
-	local screen = win:screen()
-	local max = screen:frame()
+	return function()
+		local f = win:frame()
+		local screen = win:screen()
+		local max = screen:frame()
 
-	f.x = max.x + (max.w*x)
-	f.y = max.y + (max.h*y)
-	f.w = max.w*w
-	f.h = max.h*h
-	win:setFrame(f)
+		f.x = max.x + (max.w*x)
+		f.y = max.y + (max.h*y)
+		f.w = max.w*w
+		f.h = max.h*h
+		win:setFrame(f)
+    end
 end
 
 -- highlight mouse
@@ -51,10 +53,10 @@ function mouseHighlight()
 end
 
 
-hca_bind("1", function() moveWindow(hs.window.focusedWindow(), 0, 0, 0.5, 0.5) end)
-hca_bind("2", function() moveWindow(hs.window.focusedWindow(), 0.5, 0, 0.5, 0.5) end)
-hca_bind("3", function() moveWindow(hs.window.focusedWindow(), 0, 0.5, 0.5, 0.5) end)
-hca_bind("4", function() moveWindow(hs.window.focusedWindow(), 0.5, 0.5, 0.5, 0.5) end)
+hca_bind("1", moveWindow(hs.window.focusedWindow(), 0, 0, 0.5, 0.5))
+hca_bind("2", moveWindow(hs.window.focusedWindow(), 0.5, 0, 0.5, 0.5))
+hca_bind("3", moveWindow(hs.window.focusedWindow(), 0, 0.5, 0.5, 0.5))
+hca_bind("4", moveWindow(hs.window.focusedWindow(), 0.5, 0.5, 0.5, 0.5))
 
 -- Grid layout
 hs.grid.setGrid('2x2')
@@ -128,6 +130,12 @@ hca_bind("s", function()
 	local win = hs.window.focusedWindow()
     if win == nil then return end
 	hs.grid.snap(win)
+end)
+
+hca_bind("i", function()
+	local win = hs.window.focusedWindow()
+	if win == nil then return end
+	hs.alert.show(win)
 end)
 
 function getWinInfo()
