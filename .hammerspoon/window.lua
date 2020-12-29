@@ -12,8 +12,6 @@ end)
 
 -- vars for window management
 hs.window.animationDuration=0
-local same_screen_prefix = {"cmd", "alt"}
-local move_screen_prefix = {"cmd", "alt", "ctrl"}
 
 -- Resize window for chunk of screen.
 -- For x and y: use 0 to expand fully in that dimension, 0.5 to expand halfway
@@ -52,20 +50,21 @@ function mouseHighlight()
     mouseCircleTimer = hs.timer.doAfter(3, function() mouseCircle:delete() end)
 end
 
--- Move window on same screen
-hs.hotkey.bind(same_screen_prefix, "Left", function() moveWindow(hs.window.focusedWindow(), 0, 0, 0.5, 1) end)
-hs.hotkey.bind(same_screen_prefix, "Right", function() moveWindow(hs.window.focusedWindow(), 0.5, 0, 0.5, 1) end)
-hs.hotkey.bind(same_screen_prefix, "Up", function() moveWindow(hs.window.focusedWindow(), 0, 0, 1, 0.5) end)
-hs.hotkey.bind(same_screen_prefix, "Down", function() moveWindow(hs.window.focusedWindow(), 0, 0.5, 1, 0.5) end)
+-- Move window on same screen (full vertical)
+hs.hotkey.bind(hyper_cmd_alt, "Left", function() moveWindow(hs.window.focusedWindow(), 0, 0, 0.5, 1) end)
+hs.hotkey.bind(hyper_cmd_alt, "Right", function() moveWindow(hs.window.focusedWindow(), 0.5, 0, 0.5, 1) end)
+hs.hotkey.bind(hyper_cmd_alt, "Up", function() moveWindow(hs.window.focusedWindow(), 0, 0, 1, 0.5) end)
+hs.hotkey.bind(hyper_cmd_alt, "Down", function() moveWindow(hs.window.focusedWindow(), 0, 0.5, 1, 0.5) end)
 -- maximize window
-hs.hotkey.bind(same_screen_prefix, "f", function() hs.window.focusedWindow():maximize(0) end)
+hs.hotkey.bind(hyper_cmd_alt, "f", function() hs.window.focusedWindow():maximize(0) end)
 
--- Move window between screens
-hs.hotkey.bind(move_screen_prefix, "Right", function() hs.window.focusedWindow():moveOneScreenEast() end)
-hs.hotkey.bind(move_screen_prefix, "Left", function() hs.window.focusedWindow():moveOneScreenWest() end)
+
+-- Move window on same screen (50% vertical)
+hs.hotkey.bind(hyper, "Left", function() moveWindow(hs.window.focusedWindow(), 0, 0.5, 0.5, 1) end)
+hs.hotkey.bind(hyper, "Right", function() moveWindow(hs.window.focusedWindow(), 0.5, 0.5, 0.5, 1) end)
 
 -- Center mouse to currently focused screen
-hs.hotkey.bind(move_screen_prefix, "m", function()
+hs.hotkey.bind(hyper, "m", function()
 	win = hs.window.focusedWindow()
     hs.alert.show(win:title(), hs.alert.defaultStyle, hs.screen.mainScreen(), 0.5)
     hs.mouse.setAbsolutePosition(win:frame().center)
@@ -73,7 +72,7 @@ hs.hotkey.bind(move_screen_prefix, "m", function()
 end)
 --
 -- Move mouse
-hs.hotkey.bind(move_screen_prefix, 'n', function()
+hs.hotkey.bind(hyper, 'n', function()
     local screen = hs.mouse.getCurrentScreen()
     local nextScreen = screen:next()
     local rect = nextScreen:fullFrame()
@@ -85,7 +84,7 @@ hs.hotkey.bind(move_screen_prefix, 'n', function()
 	mouseHighlight()
 end)
 
-hs.hotkey.bind(move_screen_prefix, 's', function()
+hs.hotkey.bind(hyper, 's', function()
     hs.alert.show("Moving apps....", 2)
 	local laptopScreen =  hs.screen "Color LCD"
 	local mainScreen = hs.screen "U32J59x"

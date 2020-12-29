@@ -89,3 +89,7 @@ dec2hex() {
 ip2hex() {
     python -c "import hashlib; print(hex(int(hashlib.sha256(\"$1\").hexdigest()[:8], 16) % (2**31)))"
 }
+
+runx() {
+    {for run in {1..$1}; do bash -c "$2" &; done} | sort | uniq -c
+}
