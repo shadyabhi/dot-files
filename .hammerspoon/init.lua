@@ -1,6 +1,7 @@
 require "hyper"
 require "launch"
-require "window"
+require "win_absolute"
+require "win_grid"
 require "switcher"
 
 -- Enable Apple Script support

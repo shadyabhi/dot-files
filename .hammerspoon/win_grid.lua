@@ -4,76 +4,19 @@
 -- * Move window between screens
 --]]
 
--- Notifications every time a window is changed (helpful for tiling window manager)
-hs.window.filter.default:subscribe(hs.window.filter.windowFocused, function(window, appName)
-	hs.alert.closeAll(0)
-	hs.alert.show(window:title(), hs.alert.defaultStyle, hs.screen.mainScreen(), 0.8)
-end)
-
--- vars for window management
-hs.window.animationDuration=0
-
--- Resize window for chunk of screen.
--- For x and y: use 0 to expand fully in that dimension, 0.5 to expand halfway
--- For w and h: use 1 for full, 0.5 for half
-function moveWindow(win, x, y, w, h)
-	return function()
-		local f = win:frame()
-		local screen = win:screen()
-		local max = screen:frame()
-
-		f.x = max.x + (max.w*x)
-		f.y = max.y + (max.h*y)
-		f.w = max.w*w
-		f.h = max.h*h
-		win:setFrame(f)
-    end
-end
-
--- highlight mouse
-function mouseHighlight()
-    -- Delete an existing highlight if it exists
-    if mouseCircle then
-        mouseCircle:delete()
-        if mouseCircleTimer then
-            mouseCircleTimer:stop()
-        end
-    end
-    -- Get the current co-ordinates of the mouse pointer
-    mousepoint = hs.mouse.getAbsolutePosition ()
-    -- Prepare a big red circle around the mouse pointer
-    mouseCircle = hs.drawing.circle(hs.geometry.rect(mousepoint.x-40, mousepoint.y-40, 80, 80))
-    mouseCircle:setStrokeColor({["red"]=1,["blue"]=0,["green"]=0,["alpha"]=1})
-    mouseCircle:setFill(false)
-    mouseCircle:setStrokeWidth(5)
-    mouseCircle:show()
-
-    -- Set a timer to delete the circle after 3 seconds
-    mouseCircleTimer = hs.timer.doAfter(3, function() mouseCircle:delete() end)
-end
-
-
-hca_bind("1", moveWindow(hs.window.focusedWindow(), 0, 0, 0.5, 0.5))
-hca_bind("2", moveWindow(hs.window.focusedWindow(), 0.5, 0, 0.5, 0.5))
-hca_bind("3", moveWindow(hs.window.focusedWindow(), 0, 0.5, 0.5, 0.5))
-hca_bind("4", moveWindow(hs.window.focusedWindow(), 0.5, 0.5, 0.5, 0.5))
-
-hca_bind("5", moveWindow(hs.window.focusedWindow(), 0, 0, 2/3, 1))
-hca_bind("6", moveWindow(hs.window.focusedWindow(), 2/3, 0, 1, 1))
-
-hca_bind("7", moveWindow(hs.window.focusedWindow(), 2/3, 0, 1, 1/2))
-hca_bind("8", moveWindow(hs.window.focusedWindow(), 2/3, 1/2, 1, 1/2))
+local logger = hs.logger.new('grid','info')
 
 -- Grid layout
 hs.grid.setGrid('2x2')
 hs.grid.setMargins('0x0')
 
+-- Shortcuts: move windows between grids
 h_bind("right", hs.grid.pushWindowRight)
 h_bind("left", hs.grid.pushWindowLeft)
 h_bind("down", hs.grid.pushWindowDown)
 h_bind("up", hs.grid.pushWindowUp)
 
-
+-- Shortcuts: resize window spanning multiple grids
 hca_bind("up", function()
 	win, screen, sg, g = getWinInfo()
 	if win == nil then return end
@@ -132,12 +75,26 @@ hca_bind("left", function()
     end
 end)
 
+function getWinInfo()
+    local win = hs.window.focusedWindow()
+	if win == nil then return nil, nil, nil, nil end
+
+    local screen = win:screen()
+    local sg = hs.grid.getGrid(screen)
+    local g = hs.grid.get(win)
+
+	return win, screen, sg, g
+end
+
+
+-- Shortcut: Snap the window to the closest grid
 hca_bind("s", function()
 	local win = hs.window.focusedWindow()
     if win == nil then return end
 	hs.grid.snap(win)
 end)
 
+-- Shortcuts: Change mouse focus between multiple windows in grid
 hca_bind("h", function() hs.window.focusedWindow().focusWindowWest() end)
 hca_bind("l", function() hs.window.focusedWindow().focusWindowEast() end)
 hca_bind("k", function() hs.window.focusedWindow().focusWindowNorth() end)
@@ -151,17 +108,7 @@ hca_bind("m", function()
 	mouseHighlight()
 end)
 
-function getWinInfo()
-    local win = hs.window.focusedWindow()
-	if win == nil then return nil, nil, nil, nil end
-
-    local screen = win:screen()
-    local sg = hs.grid.getGrid(screen)
-    local g = hs.grid.get(win)
-
-	return win, screen, sg, g
-end
-
+-- Grid: change the grid size
 local chooser = hs.chooser.new(function(choice)
 	if not choice then return end
 	hs.grid.setGrid(choice["text"])
@@ -174,7 +121,7 @@ function drawGrid(grid, windows)
 	local n=1
 	for h=0,grid.h-1 do
 		for w=0,hs.grid.getGrid().w-1 do
-			hs.logger.new('mymodule','info'):i(w, h, n, windows[n])
+            logger:i(w, h, n, windows[n])
 			hs.grid.set(windows[n], {x=w, y=h, w=0, h=0}, windows[n]:screen())
 			n = n + 1
 			if n > hs.grid.getGrid().w*hs.grid.getGrid().h then return end
@@ -182,7 +129,6 @@ function drawGrid(grid, windows)
 	end
 end
 
-h_bind("g", function() drawGrid(hs.grid.getGrid(), hs.window.filter.defaultCurrentSpace:getWindows()) end)
 
 chooser:choices({
       {
@@ -205,7 +151,7 @@ chooser:choices({
       },
 })
 
-hca_bind("g", function() chooser:show() end )
+
 
 hca_bind("x", function()
 	local windows = hs.fnutils.map(hs.window.filter.default:getWindows(), function(win)
@@ -221,3 +167,23 @@ hca_bind("x", function()
 
 	  hs.logger.new('my', 'info'):i(windows)
 end )
+
+-- Grid Operations
+
+-- Choose the grid you want to apply
+hca_bind("g", function() chooser:show() end )
+
+-- Rearrange windows in the grid
+h_bind("g", function() drawGrid(hs.grid.getGrid(), hs.window.filter.defaultCurrentSpace:getWindows()) end)
+
+-- Rearrange all windows in appropriate grid
+hs_bind("g", function()
+    local windows = hs.window.filter.defaultCurrentSpace:getWindows()
+    local nGrid = math.ceil(math.sqrt(#windows))
+
+    hs.alert.show("Found " .. #windows .. " windows, switching to " .. nGrid .. "x" .. nGrid .. " grid")
+
+    hs.grid.setGrid(nGrid .. "x" .. nGrid)
+    drawGrid(hs.grid.getGrid(), hs.window.filter.defaultCurrentSpace:getWindows())
+
+end)
