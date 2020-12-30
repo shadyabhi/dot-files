@@ -1,8 +1,8 @@
 require "hyper"
 require "launch"
-require "win_absolute"
-require "win_grid"
-require "switcher"
+require "win/absolute"
+require "win/grid"
+require "win/switch"
 
 -- Enable Apple Script support
 hs.allowAppleScript(true)
