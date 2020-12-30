@@ -1,8 +1,10 @@
+local logger = hs.logger.new('grid','info')
+
 -- Constants
 local textStyle = {
   font = {
     name = hs.styledtext.defaultFonts.boldSystem,
-    size = 72,
+    size = 80,
   },
   color = {white = 1, alpha = 1},
 }
@@ -13,14 +15,35 @@ local targets = {}
 
 -- Binding entry point
 local binding = hs.hotkey.modal.new({"alt"}, "tab")
+local bindingSwap = hs.hotkey.modal.new({"alt", "shift"}, "tab")
+
 local spaceWatcher = hs.spaces.watcher.new(function()
   binding:exit()
   spaceWatcher:stop()
 end)
 
+-- Alternative exit points
+binding:bind({}, "escape", nil, function() binding:exit() end)
+bindingSwap:bind({}, "escape", nil, function() bindingSwap:exit() end)
+
+binding:bind({"alt"}, "tab", nil, function() binding:exit() end)
+bindingSwap:bind({"alt", "shift"}, "tab", nil, function() bindingSwap:exit() end)
+
+
+function clearTargetBox(target)
+    target.box:setFillColor({white = 0.125, alpha = 0.8})
+    target.box:hide(0.3)
+    hs.timer.doAfter(0.3, function() target.box:delete() end)
+    target.text:hide(0.3)
+    hs.timer.doAfter(0.3, function() target.text:delete() end)
+    target.app:hide(0.3)
+    hs.timer.doAfter(0.3, function() target.app:delete() end)
+end
+
 -- Making a selection
 for i in alphabet:gmatch(".") do
   local letter = i
+
   binding:bind({}, letter, nil, function()
     local target = targets[letter]
 
@@ -31,22 +54,42 @@ for i in alphabet:gmatch(".") do
       hs.mouse.setAbsolutePosition(hs.geometry.point(
         frame.x + frame.w / 2,
         frame.y + frame.h / 2))
-      target.box:setFillColor({white = 0.125, alpha = 0.8})
-      target.box:hide(0.3)
-      hs.timer.doAfter(0.3, function() target.box:delete() end)
-      target.text:hide(0.3)
-      hs.timer.doAfter(0.3, function() target.text:delete() end)
-      target.app:hide(0.3)
-      hs.timer.doAfter(0.3, function() target.app:delete() end)
+
+      clearTargetBox(target)
       targets[letter] = nil
       binding:exit()
     end
   end)
-end
 
--- Alternative exit points
-binding:bind({}, "escape", nil, function() binding:exit() end)
-binding:bind({"alt"}, "tab", nil, function() binding:exit() end)
+  bindingSwap:bind({}, letter, nil, function()
+    local last = hs.window.filter.defaultCurrentSpace:getWindows()[1]
+    local target = targets[letter]
+
+
+    if target ~= nil then
+      -- swap frames b/w windows
+      lastFrame = last:frame()
+      targetFrame = target.window:frame()
+
+      target.window:setFrame(lastFrame)
+      last:setFrame(targetFrame)
+
+      -- Focus and mouse
+      target.window:focus()
+      target.window:focus()
+      local frame = target.window:frame()
+
+      hs.mouse.setAbsolutePosition(hs.geometry.point(
+        frame.x + frame.w / 2,
+        frame.y + frame.h / 2))
+
+      clearTargetBox(target)
+
+      targets[letter] = nil
+      bindingSwap:exit()
+    end
+  end)
+end
 
 
 function buildTargets()
@@ -123,13 +166,13 @@ function buildTargets()
     -- Add to targets
     targets[appName] = t
   end
+
+  return targets
 end
 
--- Binding enter
-binding.entered = buildTargets
 
 -- Binding exit
-function clearLetterMarks()
+function clearTargets()
   for k in pairs(targets) do
     targets[k].box:delete()
     targets[k].text:delete()
@@ -138,4 +181,10 @@ function clearLetterMarks()
   targets = {}
 end
 
-binding.exited = clearLetterMarks
+
+-- Binding enter/exit
+binding.entered = buildTargets
+binding.exited = clearTargets
+
+bindingSwap.entered = buildTargets
+bindingSwap.exited = clearTargets

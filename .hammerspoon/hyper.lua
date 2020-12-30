@@ -1,3 +1,7 @@
+--[[
+    Define all prefix hyper keys
+]]
+
 local hyper = {"cmd", "alt", "ctrl"}
 local hypershift = {"cmd", "alt", "ctrl", "shift"}
 local hyper_cmd_alt = {"cmd", "alt"}
