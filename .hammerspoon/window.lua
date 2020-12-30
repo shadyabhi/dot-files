@@ -132,10 +132,17 @@ hca_bind("s", function()
 	hs.grid.snap(win)
 end)
 
-hca_bind("i", function()
-	local win = hs.window.focusedWindow()
-	if win == nil then return end
-	hs.alert.show(win)
+hca_bind("h", function() hs.window.focusedWindow().focusWindowWest() end)
+hca_bind("l", function() hs.window.focusedWindow().focusWindowEast() end)
+hca_bind("k", function() hs.window.focusedWindow().focusWindowNorth() end)
+hca_bind("j", function() hs.window.focusedWindow().focusWindowSouth() end)
+
+-- Center mouse to currently focused screen
+hca_bind("m", function()
+	win = hs.window.focusedWindow()
+    hs.alert.show(win:title(), hs.alert.defaultStyle, hs.screen.mainScreen(), 0.5)
+    hs.mouse.setAbsolutePosition(win:frame().center)
+	mouseHighlight()
 end)
 
 function getWinInfo()
@@ -148,3 +155,63 @@ function getWinInfo()
 
 	return win, screen, sg, g
 end
+
+local chooser = hs.chooser.new(function(choice)
+	if not choice then return end
+	hs.grid.setGrid(choice["text"])
+
+	-- Arrange windows (most recently used comes first)
+	drawGrid(hs.grid.getGrid(), hs.window.filter.defaultCurrentSpace:getWindows())
+end)
+
+function drawGrid(grid, windows)
+	local n=1
+	for h=0,grid.h-1 do
+		for w=0,hs.grid.getGrid().w-1 do
+			hs.logger.new('mymodule','info'):i(w, h, n, windows[n])
+			hs.grid.set(windows[n], {x=w, y=h, w=0, h=0}, windows[n]:screen())
+			n = n + 1
+			if n > hs.grid.getGrid().w*hs.grid.getGrid().h then return end
+		end
+	end
+end
+
+h_bind("g", function() drawGrid(hs.grid.getGrid(), hs.window.filter.defaultCurrentSpace:getWindows()) end)
+
+chooser:choices({
+      {
+         ["text"] = "2x1\n",
+      },
+      {
+         ["text"] = "3x1\n",
+      },
+      {
+         ["text"] = "2x2\n",
+      },
+      {
+         ["text"] = "3x2\n",
+      },
+      {
+         ["text"] = "3x3\n",
+      },
+      {
+         ["text"] = "5x5\n",
+      },
+})
+
+hca_bind("g", function() chooser:show() end )
+
+hca_bind("x", function()
+	local windows = hs.fnutils.map(hs.window.filter.default:getWindows(), function(win)
+        if win ~= hs.window.focusedWindow() then
+          return {
+            text = win:title(),
+            subText = win:application():title(),
+            image = hs.image.imageFromAppBundle(win:application():bundleID()),
+            id = win:id()
+          }
+        end
+	  end)
+
+	  hs.logger.new('my', 'info'):i(windows)
+end )

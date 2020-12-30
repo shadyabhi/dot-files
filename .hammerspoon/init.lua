@@ -1,6 +1,7 @@
 require "hyper"
 require "launch"
 require "window"
+require "switcher"
 
 -- Enable Apple Script support
 hs.allowAppleScript(true)
