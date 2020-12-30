@@ -58,6 +58,12 @@ hca_bind("2", moveWindow(hs.window.focusedWindow(), 0.5, 0, 0.5, 0.5))
 hca_bind("3", moveWindow(hs.window.focusedWindow(), 0, 0.5, 0.5, 0.5))
 hca_bind("4", moveWindow(hs.window.focusedWindow(), 0.5, 0.5, 0.5, 0.5))
 
+hca_bind("5", moveWindow(hs.window.focusedWindow(), 0, 0, 2/3, 1))
+hca_bind("6", moveWindow(hs.window.focusedWindow(), 2/3, 0, 1, 1))
+
+hca_bind("7", moveWindow(hs.window.focusedWindow(), 2/3, 0, 1, 1/2))
+hca_bind("8", moveWindow(hs.window.focusedWindow(), 2/3, 1/2, 1, 1/2))
+
 -- Grid layout
 hs.grid.setGrid('2x2')
 hs.grid.setMargins('0x0')
