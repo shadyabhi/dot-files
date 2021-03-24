@@ -1,3 +1,7 @@
 __git_files () {
    _wanted files expl 'local files' _files
 }
+
+function git_top_author() {
+	git ls-files . | xargs -n1 git blame --line-porcelain | sed -n 's/^author //p' | sort -f | uniq -ic | sort -nr
+}
