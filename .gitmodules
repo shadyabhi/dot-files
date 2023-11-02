@@ -1,3 +1,6 @@
 [submodule "/Users/arastogi/.zsh/zsh-autosuggestions"]
 	path = /Users/arastogi/.zsh/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule ".oh-my-zsh/zsh-git-prompt"]
+	path = .oh-my-zsh/zsh-git-prompt
+	url = https://github.com/olivierverdier/zsh-git-prompt
