@@ -23,8 +23,8 @@ endif
 " sudo /export/apps/python/3.5/bin/python3 ~/get-pip.py
 " sudo /export/apps/python/3.5/bin/pip install neovim
 " sudo /export/apps/python/2.7/bin/pip install neovim
-let g:python3_host_prog  = '/Users/arastogi/.pyenv/versions/neovim3/bin/python'
-let g:python_host_prog  = '/Users/arastogi/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog  = '/usr/local/bin/python3'
+" let g:python_host_prog  = '/Users/arastogi/.pyenv/versions/neovim2/bin/python'
 let g:deoplete#sources#jedi#python_path = '/Users/arastogi/.pyenv/versions/neovim3/bin/python'
 
 

@@ -1,7 +1,9 @@
 " For new installation
 "
+" On shell:
 " $curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
 " $sh ./installer.sh ~/.config/nvim/dein
+" On Vim command prompt:-
 " :call dein#install()
 " :call dein#update()
 " :UpdateRemotePlugins
