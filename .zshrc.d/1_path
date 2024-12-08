@@ -2,6 +2,7 @@
 
 PATH=$PATH:$HOME/bin # Add RVM to PATH for scripting
 export PATH="$HOME/.npm-packages/bin:$PATH"
+export PATH=/Users/arastogi/.local/bin:$PATH
 
 export PATH=/usr/local/bin:$PATH
 export PATH=/usr/local/sbin:$PATH

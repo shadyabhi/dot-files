@@ -1,3 +1,11 @@
+# Expand global aliases
+#
+_complete_alias() {
+    [[ -n $PREFIX ]] && compadd -- ${(M)${(k)galiases}:#$PREFIX*}
+    return 1
+}
+zstyle ':completion:*' completer _complete_alias _complete _ignored
+
 # Global Aliases auto-expanding and shit!
 globalias() {
    if [[ $LBUFFER =~ '[A-Z0-9]+$' ]]; then
@@ -22,6 +30,10 @@ alias -g BI='brew install '
 alias -g VT='vim scp://tower/'
 alias -g CURLD='curl -s -D- -o /dev/null '
 alias -g SUC='| sort | uniq -c'
+
+## Jira aliases
+alias -g :JL="jira issue list "
+alias -g :J_25_BLOCKER="--jql '\"Epic Link\" in (TRAFFIC-23977)'"
 
 # Normal aliases
 alias gitdf='git --git-dir=$HOME/.dot-files/ --work-tree=$HOME'
