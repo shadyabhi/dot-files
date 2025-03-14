@@ -12,6 +12,18 @@ matches:
   - trigger: ":anki"
     replace: "> [!anki]- "
 
+  - trigger: ":info"
+    replace: "> [!info]- \n"
+
+  - trigger: ":imp"
+    replace: "💡💡💡 "
+
+  - trigger: ":wtf"
+    replace: "❓❓❓ "
+
+  - trigger: ":cl"
+    replace: "- [ ] "
+
   - trigger: ":apps"
     replace: "cd /export/content/lid/apps/"
 
@@ -22,7 +34,7 @@ matches:
       - name: mydate
         type: date
         params:
-          format: "%m/%d/%Y"
+          format: "%Y-%m-%dT%H:%M:%S%:z"
 
   # Print the output of a shell command
   - trigger: ":shell"
